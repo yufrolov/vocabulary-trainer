@@ -1,9 +1,11 @@
 services:
-  postgres:
-    image: 'postgres:latest'
+  vocabulary_postgres:
+    image: postgres:latest
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      POSTGRES_DB: "vocabulary_db"
+      POSTGRES_USER: "vocabulary_admin"
+      POSTGRES_PASSWORD: "vocabularypwd"
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
     ports:
-      - '5432'
+      - "5432:5432"
