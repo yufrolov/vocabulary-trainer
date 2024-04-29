@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: vocabulary-trainer
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/vocabulary_db
+    username: vocabulary_admin
+    password: vocabularypwd
