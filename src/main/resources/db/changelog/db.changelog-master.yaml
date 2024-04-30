@@ -27,3 +27,7 @@ databaseChangeLog:
       file: db/changelog/scripts/alter_table/01_add_constraint_words_language_fk.sql
   - include:
       file: db/changelog/scripts/alter_table/01_add_constraint_words_word_unique.sql
+  - include:
+      file: db/changelog/scripts/alter_table/02_add_column_code_in_languages.sql
+  - include:
+      file: db/changelog/scripts/alter_table/02_add_constraint_languages_code_unique.sql

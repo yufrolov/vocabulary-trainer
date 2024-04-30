@@ -1,0 +1,2 @@
+ALTER TABLE languages
+    ADD COLUMN code TEXT NOT NULL;
