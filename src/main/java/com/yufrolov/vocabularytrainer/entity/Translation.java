@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "translations")
-public class Translations {
+public class Translation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -17,12 +17,12 @@ public class Translations {
 
     @ManyToOne
     @JoinColumn(name = "word_id", referencedColumnName = "id", nullable = false)
-    private Words word;
+    private Word word;
 
     @ManyToOne
     @JoinColumn(name = "translate_word_id", referencedColumnName = "id", nullable = false)
-    private Words translateWord;
+    private Word translateWord;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translation")
-    private List<UsersWords> translations;
+    private List<UserWord> translations;
 }

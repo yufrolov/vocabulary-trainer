@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "profiles")
-public class Profiles {
+public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, unique = true)
@@ -33,5 +33,5 @@ public class Profiles {
     String email;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
-    private List<UsersWords> translatedWords;
+    private List<UserWord> translatedWords;
 }

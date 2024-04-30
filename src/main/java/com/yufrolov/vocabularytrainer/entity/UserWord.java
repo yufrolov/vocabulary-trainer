@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "users_words")
-public class UsersWords {
+public class UserWord {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, unique = true)
@@ -14,9 +14,9 @@ public class UsersWords {
 
     @ManyToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
-    private Profiles profile;
+    private Profile profile;
 
     @ManyToOne
     @JoinColumn(name = "translation_id", referencedColumnName = "id", nullable = false)
-    private Translations translation;
+    private Translation translation;
 }

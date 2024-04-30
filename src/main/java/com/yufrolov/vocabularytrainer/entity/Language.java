@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "languages")
-public class Languages {
+public class Language {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id", nullable = false, unique = true)
@@ -17,6 +17,9 @@ public class Languages {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "language")
-    private List<Words> words;
+    private List<Word> words;
 }
