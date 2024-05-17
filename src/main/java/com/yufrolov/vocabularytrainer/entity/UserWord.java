@@ -1,17 +1,14 @@
 package com.yufrolov.vocabularytrainer.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @EqualsAndHashCode
 @Entity
 @Table(name = "users_words")
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class UserWord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

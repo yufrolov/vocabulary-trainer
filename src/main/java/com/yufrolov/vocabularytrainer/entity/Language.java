@@ -1,10 +1,7 @@
 package com.yufrolov.vocabularytrainer.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,7 +10,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @Table(name = "languages")
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Language {
     @Id
     @Column(name = "code", nullable = false, unique = true)

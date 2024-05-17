@@ -1,24 +1,20 @@
 package com.yufrolov.vocabularytrainer.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class RequestTranslateDTO {
 
-    @NonNull
     @Length(min = 1, max = 100)
-    private final String word;
+    private String word;
 
-    @NonNull
     @Length(min = 2, max = 2)
-    private final String source;
+    private String source;
 
-    @NonNull
     @Length(min = 2, max = 2)
-    private final String target;
+    private String target;
 
 }

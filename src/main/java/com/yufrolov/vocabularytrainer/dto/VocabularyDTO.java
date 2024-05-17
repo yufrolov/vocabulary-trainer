@@ -1,15 +1,13 @@
 package com.yufrolov.vocabularytrainer.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class VocabularyDTO {
 
-    @NonNull
-    private final HashMap<String, String> vocabulary;
+    private HashMap<String, String> vocabulary;
 }

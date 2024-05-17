@@ -12,7 +12,6 @@ import java.util.UUID;
 @EqualsAndHashCode
 @Entity
 @Table(name = "profiles")
-@AllArgsConstructor
 @NoArgsConstructor
 public class Profile {
     @Id
