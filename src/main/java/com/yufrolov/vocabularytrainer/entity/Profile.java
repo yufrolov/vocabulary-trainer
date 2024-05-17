@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class Profile {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
-    private List<UserWord> translatedWords;
+    private List<UserWord> translatedWords = new ArrayList<>();
 
     public Profile(String password, String surname, String name, String midname, String email) {
         this.password = password;

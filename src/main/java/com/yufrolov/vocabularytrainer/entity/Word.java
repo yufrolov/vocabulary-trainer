@@ -3,6 +3,7 @@ package com.yufrolov.vocabularytrainer.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,10 +26,10 @@ public class Word {
     private Language languageCode;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "word")
-    private List<Translation> wordsToTranslate;
+    private List<Translation> wordsToTranslate = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translateWord")
-    private List<Translation> translatedWords;
+    private List<Translation> translatedWords = new ArrayList<>();
 
     public Word(String word, Language languageCode) {
         this.word = word;

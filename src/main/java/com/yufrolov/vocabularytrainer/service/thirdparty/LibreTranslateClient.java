@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(value = "libretranslate", url = "http://localhost:5000")
 public interface LibreTranslateClient {
 
-    @PostMapping(value = "/translate")
+    @PostMapping(value = "/translate", headers = "Content-Type: application/json")
     ResponseTranslateDTO translate(LibreTranslateDTO libreTranslateDTO);
 
 }

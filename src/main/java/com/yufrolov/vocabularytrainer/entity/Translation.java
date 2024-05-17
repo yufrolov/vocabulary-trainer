@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,7 +31,7 @@ public class Translation {
     private Word translateWord;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translation")
-    private List<UserWord> translations;
+    private List<UserWord> translations = new ArrayList<>();
 
     public Translation(Word word, Word translateWord) {
         this.word = word;

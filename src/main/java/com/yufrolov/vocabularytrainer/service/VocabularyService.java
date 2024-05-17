@@ -15,14 +15,20 @@ public class VocabularyService {
 
     LanguageService languageService;
 
-    public VocabularyService(UserWordRepository userWordRepository, LanguageService languageService) {
+    ProfileService profileService;
+
+    public VocabularyService(UserWordRepository userWordRepository, LanguageService languageService, ProfileService profileService) {
         this.userWordRepository = userWordRepository;
         this.languageService = languageService;
+        this.profileService = profileService;
     }
 
     public VocabularyDTO getVocabulary(UUID profileId, String languageCode, String languageTranslateCode) {
         languageService.search(languageCode);
         languageService.search(languageTranslateCode);
+
+        profileService.search(profileId);
+
         var userWord = userWordRepository.findUserWordByProfileId(profileId);
         var translations = userWord.stream()
                 .filter(it ->

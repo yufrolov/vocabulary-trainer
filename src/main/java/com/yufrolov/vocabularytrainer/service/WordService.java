@@ -40,6 +40,7 @@ public class WordService {
     }
 
     private ResponseTranslateDTO translateExternal(RequestTranslateDTO requestTranslateDTO) {
+        languageService.search(requestTranslateDTO.getTarget());
         return libreTranslateClient.translate(
                 new LibreTranslateDTO(
                         requestTranslateDTO.getWord()
