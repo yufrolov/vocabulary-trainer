@@ -1,17 +1,23 @@
 package com.yufrolov.vocabularytrainer.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "translations")
+@NoArgsConstructor
 public class Translation {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
@@ -25,4 +31,9 @@ public class Translation {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translation")
     private List<UserWord> translations;
+
+    public Translation(Word word, Word translateWord) {
+        this.word = word;
+        this.translateWord = translateWord;
+    }
 }

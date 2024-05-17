@@ -18,76 +18,76 @@ public class ProfileService {
         this.profileRepository = profileRepository;
     }
 
-    private boolean isProfileExist(String login, String email){
-        if(profileRepository.findByLoginAndEmail(login,email).isPresent()){
-            throw new ProfileAlreadyExistException("There is a profile with this login and email");
-        }
-        else if (profileRepository.findByLogin(login).isPresent()) {
-            throw new ProfileAlreadyExistException("There is a profile with this login");
-        }
-        else if (profileRepository.findByEmail(email).isPresent()) {
+    private boolean isProfileExist(String email) {
+        if (profileRepository.findByEmail(email).isPresent()) {
             throw new ProfileAlreadyExistException("There is a profile with this email");
         }
         return false;
     }
 
-    public UUID create(ProfileDTO profileDTO){
-        if(!isProfileExist(profileDTO.getLogin(),profileDTO.getEmail())){
-            var profile = new Profile(profileDTO.getLogin()
-                    ,profileDTO.getPassword()
-                    ,profileDTO.getSurname()
-                    ,profileDTO.getName()
-                    ,profileDTO.getMidname()
-                    ,profileDTO.getEmail()
-            );
-            return profileRepository.save(profile).getId();
+    public Profile search(UUID id) {
+        return profileRepository.findById(id).orElseThrow(
+                () -> new ProfileNotFoundException("Not found user"));
+    }
+
+    private Profile mapToEntity(ProfileDTO profileDTO) {
+        return new Profile(
+                profileDTO.getPassword()
+                , profileDTO.getSurname()
+                , profileDTO.getName()
+                , profileDTO.getMidname()
+                , profileDTO.getEmail()
+        );
+    }
+
+    public UUID create(ProfileDTO profileDTO) {
+        if (!isProfileExist(profileDTO.getEmail())) {
+            return profileRepository.save(mapToEntity(profileDTO)).getId();
         }
         return null;
     }
 
-    public List<Profile> getAllProfiles(){
+    public List<Profile> getAllProfiles() {
         return profileRepository.findAll();
     }
 
-    public UUID delete(UUID id){
-        var profile = profileRepository.findById(id);
-        if (profile.isPresent()) {
-            profileRepository.deleteById(id);
-            return id;
-        }
-        throw new ProfileNotFoundException("Not found user");
+    public UUID delete(UUID id) {
+        profileRepository.findById(id).orElseThrow(
+                () -> new ProfileNotFoundException("Not found user")
+        );
+        profileRepository.deleteById(id);
+        return id;
     }
 
-    public UUID update(UUID id, ProfileDTO profileDTO){
-        var profile = profileRepository.findById(id);
-        if (profile.isPresent()){
-            return profileRepository
-                    .save(updateFieldProfile(profile.get(), profileDTO))
-                    .getId();
-        }
-        throw new ProfileNotFoundException("Not found user");
+    public UUID update(UUID id, ProfileDTO profileDTO) {
+        var profile = profileRepository.findById(id).orElseThrow(
+                () -> new ProfileNotFoundException("Not found user")
+        );
+        return profileRepository
+                .save(updateFieldProfile(profile, profileDTO))
+                .getId();
     }
 
-    private Profile updateFieldProfile(Profile profile, ProfileDTO profileDTO){
+    private Profile updateFieldProfile(Profile profile, ProfileDTO profileDTO) {
         var updateProfile = new Profile(profile);
         String val;
         val = profileDTO.getSurname();
-        if(val != null){
+        if (val != null) {
             updateProfile.setSurname(val);
         }
 
         val = profileDTO.getName();
-        if(val != null){
+        if (val != null) {
             updateProfile.setName(val);
         }
 
         val = profileDTO.getMidname();
-        if(val != null){
+        if (val != null) {
             updateProfile.setMidname(val);
         }
 
         val = profileDTO.getEmail();
-        if(val != null){
+        if (val != null) {
             updateProfile.setEmail(val);
         }
         return updateProfile;

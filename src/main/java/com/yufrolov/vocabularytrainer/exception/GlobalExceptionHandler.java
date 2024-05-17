@@ -11,6 +11,13 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<Object> handleMethod(Exception ex) {
+        return ResponseEntity.internalServerError().body(
+                List.of(ex.getClass().getName())
+        );
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethod(MethodArgumentNotValidException ex) {
         return ResponseEntity.badRequest().body(
@@ -28,6 +35,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ProfileAlreadyExistException.class)
     public ResponseEntity<Object> handleMethod(ProfileAlreadyExistException ex) {
+        return ResponseEntity.badRequest().body(
+                List.of(ex.getMessage())
+        );
+    }
+
+    @ExceptionHandler(value = LanguageNotFoundException.class)
+    public ResponseEntity<Object> handleMethod(LanguageNotFoundException ex) {
         return ResponseEntity.badRequest().body(
                 List.of(ex.getMessage())
         );

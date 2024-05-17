@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/v1/profile")
 public class ProfileController {
 
     private final ProfileService profileService;

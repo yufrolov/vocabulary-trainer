@@ -1,14 +1,20 @@
 package com.yufrolov.vocabularytrainer.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "users_words")
+@RequiredArgsConstructor
 public class UserWord {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
@@ -19,4 +25,9 @@ public class UserWord {
     @ManyToOne
     @JoinColumn(name = "translation_id", referencedColumnName = "id", nullable = false)
     private Translation translation;
+
+    public UserWord(Profile profile, Translation translation) {
+        this.profile = profile;
+        this.translation = translation;
+    }
 }

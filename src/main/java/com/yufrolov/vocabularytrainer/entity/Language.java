@@ -1,25 +1,27 @@
 package com.yufrolov.vocabularytrainer.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "languages")
+@RequiredArgsConstructor
 public class Language {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false, unique = true)
-    private Integer id;
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
 
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @Column(name = "code", nullable = false, unique = true)
-    private String code;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "language")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "languageCode")
     private List<Word> words;
 }
