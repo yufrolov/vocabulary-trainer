@@ -18,4 +18,5 @@ public interface UserWordRepository extends JpaRepository<UserWord, Long> {
     @Query(value = "select * from users_words uw where uw.profile_id = ?1"
             , nativeQuery = true)
     ArrayList<UserWord> findUserWordByProfileId(UUID profileId);
+
 }

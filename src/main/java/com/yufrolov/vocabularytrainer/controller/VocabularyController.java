@@ -2,10 +2,7 @@ package com.yufrolov.vocabularytrainer.controller;
 
 import com.yufrolov.vocabularytrainer.dto.VocabularyDTO;
 import com.yufrolov.vocabularytrainer.service.VocabularyService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -24,5 +21,11 @@ public class VocabularyController {
             , @PathVariable(name = "lang") String languageCode
             , @PathVariable(name = "translateLang") String languageTranslateCode) {
         return vocabularyService.getVocabulary(profileId, languageCode, languageTranslateCode);
+    }
+    @DeleteMapping("/{lang}-{translateLang}/{profileId}")
+    public String deleteVocabulary(@PathVariable(name = "profileId") UUID profileId
+            , @PathVariable(name = "lang") String languageCode
+            , @PathVariable(name = "translateLang") String languageTranslateCode) {
+        return vocabularyService.deleteVocabulary(profileId, languageCode, languageTranslateCode);
     }
 }
