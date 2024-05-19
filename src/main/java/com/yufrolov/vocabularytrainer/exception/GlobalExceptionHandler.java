@@ -28,9 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = ProfileNotFoundException.class)
     public ResponseEntity<Object> handleMethod(ProfileNotFoundException ex) {
-        return ResponseEntity.badRequest().body(
-                List.of(ex.getMessage())
-        );
+        return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(value = ProfileAlreadyExistException.class)
@@ -49,8 +47,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = VocabularyNotFoundException.class)
     public ResponseEntity<Object> handleMethod(VocabularyNotFoundException ex) {
-        return ResponseEntity.badRequest().body(
-                List.of(ex.getMessage())
-        );
+        return ResponseEntity.notFound().build();
     }
 }

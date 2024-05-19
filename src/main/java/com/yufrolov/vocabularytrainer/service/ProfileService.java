@@ -51,12 +51,11 @@ public class ProfileService {
         return profileRepository.findAll();
     }
 
-    public UUID delete(UUID id) {
+    public void delete(UUID id) {
         profileRepository.findById(id).orElseThrow(
                 () -> new ProfileNotFoundException("Not found user")
         );
         profileRepository.deleteById(id);
-        return id;
     }
 
     public UUID update(UUID id, ProfileDTO profileDTO) {

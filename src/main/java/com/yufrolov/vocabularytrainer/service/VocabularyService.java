@@ -54,10 +54,9 @@ public class VocabularyService {
         return vocabularyRepository.findVocabulariesByProfileId(profileId);
     }
 
-    public Long deleteVocabulary(UUID profileId, Long id){
+    public void deleteVocabulary(UUID profileId, Long id){
         var vocabulary = getVocabulary(profileId, id);
         vocabularyRepository.delete(vocabulary);
-        return vocabulary.getId();
     }
 
     public void deleteTranslationInVocabulary(UUID profileId, Long id, Long translationId){
