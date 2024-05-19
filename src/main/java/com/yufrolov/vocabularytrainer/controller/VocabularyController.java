@@ -58,7 +58,7 @@ public class VocabularyController {
     })
     @GetMapping("/{id}/{profileId}")
     public Vocabulary getVocabulary(@PathVariable(name = "profileId") UUID profileId,
-                                    @PathVariable(name = "id") Long id){
+                                    @PathVariable(name = "id") Long id) {
         return vocabularyService.getVocabulary(profileId, id);
     }
 
@@ -74,7 +74,7 @@ public class VocabularyController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}/{profileId}")
     public void deleteVocabulary(@PathVariable(name = "profileId") UUID profileId,
-                             @PathVariable(name = "id") Long id){
+                                 @PathVariable(name = "id") Long id) {
         vocabularyService.deleteVocabulary(profileId, id);
     }
 
@@ -88,7 +88,7 @@ public class VocabularyController {
             content = @Content)
     })
     @GetMapping("/{profileId}")
-    public List<Vocabulary> getAllVocabulary(@PathVariable(name = "profileId") UUID profileId){
+    public List<Vocabulary> getAllVocabulary(@PathVariable(name = "profileId") UUID profileId) {
         return vocabularyService.getAllVocabularies(profileId);
     }
 
@@ -121,7 +121,7 @@ public class VocabularyController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping ("/{id}/translations/{translationId}/{profileId}")
+    @DeleteMapping("/{id}/translations/{translationId}/{profileId}")
     public void deleteTranslationInVocabulary(@PathVariable(name = "profileId") UUID profileId
             , @PathVariable(name = "id") Long id
             , @PathVariable(name = "translationId") Long translationId) {

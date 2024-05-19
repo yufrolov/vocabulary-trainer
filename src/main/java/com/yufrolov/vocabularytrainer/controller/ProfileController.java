@@ -53,7 +53,7 @@ public class ProfileController {
     }
 
 
-    @Operation(summary = "Viewing an account by user ID")
+    @Operation(summary = "Viewing an account by user id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile found",
                     content = @Content)

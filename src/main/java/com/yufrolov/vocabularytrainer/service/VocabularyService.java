@@ -30,19 +30,20 @@ public class VocabularyService {
         this.vocabularyTranslationService = vocabularyTranslationService;
     }
 
-    private boolean isLangEquals(String lang, String translateLang){
+    private boolean isLangEquals(String lang, String translateLang) {
         return lang.equals(translateLang);
     }
 
-    public Vocabulary create(UUID profileId,VocabularyDTO vocabularyDTO){
+    public Vocabulary create(UUID profileId, VocabularyDTO vocabularyDTO) {
         var profile = profileService.getProfile(profileId);
         var lang = languageService.search(vocabularyDTO.getSource());
         var translateLang = languageService.search(vocabularyDTO.getTarget());
-        if (isLangEquals(lang.getCode(), translateLang.getCode())){
+        if (isLangEquals(lang.getCode(), translateLang.getCode())) {
             throw new LanguageEqualsException("A vocabulary cannot be with the same languages");
         }
         return vocabularyRepository.save(new Vocabulary(profile, lang, translateLang));
     }
+
     public Vocabulary getVocabulary(UUID profileId, Long id) {
         profileService.getProfile(profileId);
         return vocabularyRepository.findVocabularyByIdAndProfileId(profileId, id).orElseThrow(
@@ -50,18 +51,18 @@ public class VocabularyService {
         );
     }
 
-    public List<Vocabulary> getAllVocabularies(UUID profileId){
+    public List<Vocabulary> getAllVocabularies(UUID profileId) {
         return vocabularyRepository.findVocabulariesByProfileId(profileId);
     }
 
-    public void deleteVocabulary(UUID profileId, Long id){
+    public void deleteVocabulary(UUID profileId, Long id) {
         var vocabulary = getVocabulary(profileId, id);
         vocabularyRepository.delete(vocabulary);
     }
 
-    public void deleteTranslationInVocabulary(UUID profileId, Long id, Long translationId){
+    public void deleteTranslationInVocabulary(UUID profileId, Long id, Long translationId) {
         getVocabulary(profileId, id);
-        vocabularyTranslationService.deleteByVocabularyIdAndTranslationId(id,translationId);
+        vocabularyTranslationService.deleteByVocabularyIdAndTranslationId(id, translationId);
     }
 
 }

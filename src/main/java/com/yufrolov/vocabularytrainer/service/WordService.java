@@ -60,7 +60,7 @@ public class WordService {
     private void savingWordConnections(Word word, Word translateWord, Vocabulary vocabulary) {
         vocabularyTranslationService.create(
                 vocabulary
-                ,translationService.createOrGet(word, translateWord));
+                , translationService.createOrGet(word, translateWord));
     }
 
     private Word findTranslateWord(Word word, String languageCode) {
@@ -80,7 +80,7 @@ public class WordService {
 
     public TranslateDTO translate(UUID profileId, TranslateDTO translateDTO, Long vocabularyId) {
         Word translateWord;
-        Vocabulary vocabulary = vocabularyService.getVocabulary(profileId,vocabularyId);
+        Vocabulary vocabulary = vocabularyService.getVocabulary(profileId, vocabularyId);
         var word = createOrGet(translateDTO.getTranslatedText(), vocabulary.getLanguageCode().getCode());
 
         translateWord = findTranslateWord(word, vocabulary.getLanguageTranslateCode().getCode());

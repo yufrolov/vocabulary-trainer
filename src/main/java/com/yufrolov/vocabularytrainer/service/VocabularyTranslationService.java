@@ -15,15 +15,15 @@ public class VocabularyTranslationService {
         this.vocabularyTranslationRepository = vocabularyTranslationRepository;
     }
 
-    public void create(Vocabulary vocabulary, Translation translation){
+    public void create(Vocabulary vocabulary, Translation translation) {
         var vocabularyTranslation = vocabularyTranslationRepository
-                .findVocabularyTranslationByVocabularyIdAndTranslationId(vocabulary.getId(),translation.getId()).orElse(null);
+                .findVocabularyTranslationByVocabularyIdAndTranslationId(vocabulary.getId(), translation.getId()).orElse(null);
         if (vocabularyTranslation == null) {
             vocabularyTranslationRepository.save(new VocabularyTranslation(vocabulary, translation));
         }
     }
 
-    public void deleteByVocabularyIdAndTranslationId(Long vocabularyId, Long translationId){
+    public void deleteByVocabularyIdAndTranslationId(Long vocabularyId, Long translationId) {
         vocabularyTranslationRepository
                 .findVocabularyTranslationByVocabularyIdAndTranslationId(vocabularyId, translationId).
                 ifPresent(vocabularyTranslationRepository::delete);

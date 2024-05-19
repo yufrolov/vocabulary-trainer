@@ -33,7 +33,7 @@ public class Translation {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translation")
-    private List<VocabularyTranslation> vocabularyTranslations  = new ArrayList<>();
+    private List<VocabularyTranslation> vocabularyTranslations = new ArrayList<>();
 
     public Translation(Word word, Word translateWord) {
         this.word = word;

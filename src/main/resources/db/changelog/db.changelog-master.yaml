@@ -27,3 +27,9 @@ databaseChangeLog:
       file: db/changelog/scripts/13_add_constraint_words_language_fk.sql
   - include:
       file: db/changelog/scripts/14_add_constraint_words_word_and_code_unique.sql
+  - include:
+      file: db/changelog/scripts/15_add_constraint_vocabularies_profile_fk.sql
+  - include:
+      file: db/changelog/scripts/16_add_constraint_vocabularies_language_fk.sql
+  - include:
+      file: db/changelog/scripts/17_add_constraint_vocabularies_language_translate_fk.sql

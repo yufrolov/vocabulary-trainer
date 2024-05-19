@@ -40,6 +40,6 @@ public class Vocabulary {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vocabulary")
-    private List<VocabularyTranslation> vocabularyTranslations  = new ArrayList<>();
+    private List<VocabularyTranslation> vocabularyTranslations = new ArrayList<>();
 
 }

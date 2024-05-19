@@ -12,6 +12,6 @@ import org.hibernate.validator.constraints.Length;
 public class TranslateDTO {
 
     @Length(min = 1)
-    @JsonAlias({"Text","text"})
+    @JsonAlias({"Text", "text"})
     private String translatedText;
 }
