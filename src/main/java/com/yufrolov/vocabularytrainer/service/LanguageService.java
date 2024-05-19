@@ -15,7 +15,7 @@ public class LanguageService {
 
     public Language search(String code) {
         return languageRepository.findById(code).orElseThrow(
-                () -> new LanguageNotFoundException("Допустимые коды языков: " +
+                () -> new LanguageNotFoundException("Valid language codes: " +
                         languageRepository.findAll().stream().map(Language::getCode).toList()
                 )
         );

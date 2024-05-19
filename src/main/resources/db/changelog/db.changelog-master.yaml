@@ -2,26 +2,28 @@ databaseChangeLog:
   - include:
       file: db/changelog/scripts/01_add_table_languages.sql
   - include:
-      file: db/changelog/scripts/01_add_table_profiles.sql
+      file: db/changelog/scripts/02_add_table_profiles.sql
   - include:
-      file: db/changelog/scripts/01_add_table_translations.sql
+      file: db/changelog/scripts/03_add_table_vocabularies.sql
   - include:
-      file: db/changelog/scripts/01_add_table_users_words.sql
+      file: db/changelog/scripts/04_add_table_translations.sql
   - include:
-      file: db/changelog/scripts/01_add_table_words.sql
+      file: db/changelog/scripts/05_add_table_vocabularies_translations.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_languages_title_unique.sql
+      file: db/changelog/scripts/06_add_table_words.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_profiles_email_unique.sql
+      file: db/changelog/scripts/07_add_constraint_languages_title_unique.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_translations_translate_word_fk.sql
+      file: db/changelog/scripts/08_add_constraint_profiles_email_unique.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_translations_word_fk.sql
+      file: db/changelog/scripts/09_add_constraint_translations_translate_word_fk.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_users_words_profile_fk.sql
+      file: db/changelog/scripts/10_add_constraint_translations_word_fk.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_users_words_translation_fk.sql
+      file: db/changelog/scripts/11_add_constraint_vocabularies_translations_vocabulary_fk.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_words_language_fk.sql
+      file: db/changelog/scripts/12_add_constraint_vocabularies_translations_translation_fk.sql
   - include:
-      file: db/changelog/scripts/01_add_constraint_words_word_and_code_unique.sql
+      file: db/changelog/scripts/13_add_constraint_words_language_fk.sql
+  - include:
+      file: db/changelog/scripts/14_add_constraint_words_word_and_code_unique.sql

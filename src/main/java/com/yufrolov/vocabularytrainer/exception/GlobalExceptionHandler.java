@@ -46,4 +46,11 @@ public class GlobalExceptionHandler {
                 List.of(ex.getMessage())
         );
     }
+
+    @ExceptionHandler(value = VocabularyNotFoundException.class)
+    public ResponseEntity<Object> handleMethod(VocabularyNotFoundException ex) {
+        return ResponseEntity.badRequest().body(
+                List.of(ex.getMessage())
+        );
+    }
 }

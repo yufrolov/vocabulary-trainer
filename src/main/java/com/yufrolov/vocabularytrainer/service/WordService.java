@@ -1,9 +1,9 @@
 package com.yufrolov.vocabularytrainer.service;
 
 import com.yufrolov.vocabularytrainer.dto.LibreTranslateDTO;
-import com.yufrolov.vocabularytrainer.dto.RequestTranslateDTO;
-import com.yufrolov.vocabularytrainer.dto.ResponseTranslateDTO;
+import com.yufrolov.vocabularytrainer.dto.TranslateDTO;
 import com.yufrolov.vocabularytrainer.entity.Translation;
+import com.yufrolov.vocabularytrainer.entity.Vocabulary;
 import com.yufrolov.vocabularytrainer.entity.Word;
 import com.yufrolov.vocabularytrainer.repository.WordRepository;
 import com.yufrolov.vocabularytrainer.service.thirdparty.LibreTranslateClient;
@@ -15,37 +15,37 @@ import java.util.UUID;
 public class WordService {
     private final WordRepository wordRepository;
 
-    private final ProfileService profileService;
-
-    private final UserWordService userWordService;
+    private final VocabularyService vocabularyService;
 
     private final LanguageService languageService;
 
     private final TranslationService translationService;
 
+    private final VocabularyTranslationService vocabularyTranslationService;
+
     private final LibreTranslateClient libreTranslateClient;
 
     public WordService(WordRepository wordRepository
-            , UserWordService userWordService
-            , ProfileService profileService
+            , VocabularyService vocabularyService
             , LanguageService languageService
             , TranslationService translationService
+            , VocabularyTranslationService vocabularyTranslationService
             , LibreTranslateClient libreTranslateClient) {
         this.wordRepository = wordRepository;
-        this.profileService = profileService;
-        this.userWordService = userWordService;
+        this.vocabularyService = vocabularyService;
         this.languageService = languageService;
         this.translationService = translationService;
+        this.vocabularyTranslationService = vocabularyTranslationService;
         this.libreTranslateClient = libreTranslateClient;
     }
 
-    private ResponseTranslateDTO translateExternal(RequestTranslateDTO requestTranslateDTO) {
-        languageService.search(requestTranslateDTO.getTarget());
+    private TranslateDTO translateExternal(TranslateDTO translateDTO, Vocabulary vocabulary) {
+        languageService.search(vocabulary.getLanguageTranslateCode().getCode());
         return libreTranslateClient.translate(
                 new LibreTranslateDTO(
-                        requestTranslateDTO.getWord()
-                        , requestTranslateDTO.getSource()
-                        , requestTranslateDTO.getTarget()
+                        translateDTO.getTranslatedText()
+                        , vocabulary.getLanguageCode().getCode()
+                        , vocabulary.getLanguageTranslateCode().getCode()
                         , "text"
                         , ""
                 ));
@@ -57,11 +57,10 @@ public class WordService {
                 .orElseGet(() -> wordRepository.save(new Word(text, languageService.search(languageCode))));
     }
 
-    private void savingWordConnections(UUID profileId, Word word, Word translateWord) {
-        userWordService.createOrGet(
-                profileService.search(profileId)
-                , translationService.createOrGet(word, translateWord)
-        );
+    private void savingWordConnections(Word word, Word translateWord, Vocabulary vocabulary) {
+        vocabularyTranslationService.create(
+                vocabulary
+                ,translationService.createOrGet(word, translateWord));
     }
 
     private Word findTranslateWord(Word word, String languageCode) {
@@ -79,17 +78,18 @@ public class WordService {
     }
 
 
-    public ResponseTranslateDTO translate(UUID id, RequestTranslateDTO requestTranslateDTO) {
+    public TranslateDTO translate(UUID profileId, TranslateDTO translateDTO, Long vocabularyId) {
         Word translateWord;
-        var word = createOrGet(requestTranslateDTO.getWord(), requestTranslateDTO.getSource());
+        Vocabulary vocabulary = vocabularyService.getVocabulary(profileId,vocabularyId);
+        var word = createOrGet(translateDTO.getTranslatedText(), vocabulary.getLanguageCode().getCode());
 
-        translateWord = findTranslateWord(word, requestTranslateDTO.getTarget());
+        translateWord = findTranslateWord(word, vocabulary.getLanguageTranslateCode().getCode());
 
-        var response = translateWord == null ? translateExternal(requestTranslateDTO) : new ResponseTranslateDTO(translateWord.getWord());
+        var response = translateWord == null ? translateExternal(translateDTO, vocabulary) : new TranslateDTO(translateWord.getWord());
 
-        translateWord = createOrGet(response.getTranslatedText(), requestTranslateDTO.getTarget());
+        translateWord = createOrGet(response.getTranslatedText(), vocabulary.getLanguageTranslateCode().getCode());
 
-        savingWordConnections(id, word, translateWord);
+        savingWordConnections(word, translateWord, vocabulary);
         return response;
     }
 

@@ -1,46 +1,68 @@
 package com.yufrolov.vocabularytrainer.service;
 
 import com.yufrolov.vocabularytrainer.dto.VocabularyDTO;
+import com.yufrolov.vocabularytrainer.entity.Vocabulary;
+import com.yufrolov.vocabularytrainer.exception.LanguageEqualsException;
+import com.yufrolov.vocabularytrainer.exception.VocabularyNotFoundException;
+import com.yufrolov.vocabularytrainer.repository.VocabularyRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class VocabularyService {
+    private final VocabularyRepository vocabularyRepository;
 
-    UserWordService userWordService;
+    private final LanguageService languageService;
 
-    LanguageService languageService;
+    private final ProfileService profileService;
 
-    ProfileService profileService;
+    private final VocabularyTranslationService vocabularyTranslationService;
 
-    public VocabularyService(UserWordService userWordService, LanguageService languageService, ProfileService profileService) {
-        this.userWordService = userWordService;
+    public VocabularyService(VocabularyRepository vocabularyRepository
+            , LanguageService languageService
+            , ProfileService profileService
+            , VocabularyTranslationService vocabularyTranslationService) {
+        this.vocabularyRepository = vocabularyRepository;
         this.languageService = languageService;
         this.profileService = profileService;
+        this.vocabularyTranslationService = vocabularyTranslationService;
     }
 
-    private void parametersSatisfy(UUID profileId, String languageCode, String languageTranslateCode) {
-        languageService.search(languageCode);
-        languageService.search(languageTranslateCode);
-
-        profileService.search(profileId);
+    private boolean isLangEquals(String lang, String translateLang){
+        return lang.equals(translateLang);
     }
 
-    public VocabularyDTO getVocabulary(UUID profileId, String languageCode, String languageTranslateCode) {
-        parametersSatisfy(profileId, languageCode, languageTranslateCode);
-        var translations = userWordService.getUserTranslation(profileId, languageCode, languageTranslateCode);
-
-        HashMap<String, String> words = new HashMap<>();
-        for (var translate : translations) {
-            words.put(translate.getWord().getWord(), translate.getTranslateWord().getWord());
+    public Vocabulary create(UUID profileId,VocabularyDTO vocabularyDTO){
+        var profile = profileService.getProfile(profileId);
+        var lang = languageService.search(vocabularyDTO.getSource());
+        var translateLang = languageService.search(vocabularyDTO.getTarget());
+        if (isLangEquals(lang.getCode(), translateLang.getCode())){
+            throw new LanguageEqualsException("A vocabulary cannot be with the same languages");
         }
-        return new VocabularyDTO(words);
+        return vocabularyRepository.save(new Vocabulary(profile, lang, translateLang));
+    }
+    public Vocabulary getVocabulary(UUID profileId, Long id) {
+        profileService.getProfile(profileId);
+        return vocabularyRepository.findVocabularyByIdAndProfileId(profileId, id).orElseThrow(
+                () -> new VocabularyNotFoundException("You don't have a dictionary with this id")
+        );
     }
 
-    public String deleteVocabulary(UUID profileId, String languageCode, String languageTranslateCode) {
-        parametersSatisfy(profileId, languageCode, languageTranslateCode);
-        return userWordService.deleteUserWords(profileId, languageCode, languageTranslateCode);
+    public List<Vocabulary> getAllVocabularies(UUID profileId){
+        return vocabularyRepository.findVocabulariesByProfileId(profileId);
     }
+
+    public Long deleteVocabulary(UUID profileId, Long id){
+        var vocabulary = getVocabulary(profileId, id);
+        vocabularyRepository.delete(vocabulary);
+        return vocabulary.getId();
+    }
+
+    public void deleteTranslationInVocabulary(UUID profileId, Long id, Long translationId){
+        getVocabulary(profileId, id);
+        vocabularyTranslationService.deleteByVocabularyIdAndTranslationId(id,translationId);
+    }
+
 }

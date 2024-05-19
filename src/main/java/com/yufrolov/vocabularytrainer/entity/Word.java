@@ -1,5 +1,6 @@
 package com.yufrolov.vocabularytrainer.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,13 +22,16 @@ public class Word {
     @Column(name = "word", nullable = false, unique = true)
     private String word;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "language_code", referencedColumnName = "code", nullable = false)
     private Language languageCode;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "word")
     private List<Translation> wordsToTranslate = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "translateWord")
     private List<Translation> translatedWords = new ArrayList<>();
 

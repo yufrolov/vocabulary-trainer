@@ -25,7 +25,7 @@ public class ProfileService {
         return false;
     }
 
-    public Profile search(UUID id) {
+    public Profile getProfile(UUID id) {
         return profileRepository.findById(id).orElseThrow(
                 () -> new ProfileNotFoundException("Not found user"));
     }
@@ -40,9 +40,9 @@ public class ProfileService {
         );
     }
 
-    public UUID create(ProfileDTO profileDTO) {
+    public Profile create(ProfileDTO profileDTO) {
         if (!isProfileExist(profileDTO.getEmail())) {
-            return profileRepository.save(mapToEntity(profileDTO)).getId();
+            return profileRepository.save(mapToEntity(profileDTO));
         }
         return null;
     }

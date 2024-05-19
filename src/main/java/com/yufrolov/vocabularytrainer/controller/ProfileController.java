@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/profile")
+@RequestMapping("/v1/profiles")
 public class ProfileController {
 
     private final ProfileService profileService;
@@ -20,7 +20,7 @@ public class ProfileController {
     }
 
     @PostMapping()
-    public UUID create(@RequestBody @Valid ProfileDTO profileDTO) {
+    public Profile create(@RequestBody @Valid ProfileDTO profileDTO) {
         return profileService.create(profileDTO);
 
     }
@@ -28,6 +28,11 @@ public class ProfileController {
     @GetMapping
     public List<Profile> getProfiles() {
         return profileService.getAllProfiles();
+    }
+
+    @GetMapping("/{id}")
+    public Profile getProfile(@PathVariable(name = "id") UUID id) {
+        return profileService.getProfile(id);
     }
 
     @PutMapping("/{id}")

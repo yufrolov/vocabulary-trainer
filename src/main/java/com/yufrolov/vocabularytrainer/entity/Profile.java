@@ -38,7 +38,7 @@ public class Profile {
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
-    private List<UserWord> translatedWords = new ArrayList<>();
+    private List<Vocabulary> vocabularies = new ArrayList<>();
 
     public Profile(String password, String surname, String name, String midname, String email) {
         this.password = password;
@@ -55,6 +55,6 @@ public class Profile {
         this.name = profile.getName();
         this.midname = profile.getMidname();
         this.email = profile.getEmail();
-        this.translatedWords = profile.getTranslatedWords();
+        this.vocabularies = profile.getVocabularies();
     }
 }
