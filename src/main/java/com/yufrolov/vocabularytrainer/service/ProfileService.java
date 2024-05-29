@@ -58,13 +58,12 @@ public class ProfileService {
         profileRepository.deleteById(id);
     }
 
-    public UUID update(UUID id, ProfileDTO profileDTO) {
+    public Profile update(UUID id, ProfileDTO profileDTO) {
         var profile = profileRepository.findById(id).orElseThrow(
                 () -> new ProfileNotFoundException("Not found user")
         );
         return profileRepository
-                .save(updateFieldProfile(profile, profileDTO))
-                .getId();
+                .save(updateFieldProfile(profile, profileDTO));
     }
 
     private Profile updateFieldProfile(Profile profile, ProfileDTO profileDTO) {

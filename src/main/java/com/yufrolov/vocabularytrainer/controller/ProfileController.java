@@ -80,7 +80,7 @@ public class ProfileController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PutMapping("/{id}")
-    public UUID update(@PathVariable(name = "id") UUID id, @RequestBody @Valid ProfileDTO profileDTO) {
+    public Profile update(@PathVariable(name = "id") UUID id, @RequestBody @Valid ProfileDTO profileDTO) {
         return profileService.update(id, profileDTO);
     }
 
