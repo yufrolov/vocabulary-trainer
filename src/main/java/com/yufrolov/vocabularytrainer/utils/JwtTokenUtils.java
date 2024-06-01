@@ -59,7 +59,6 @@ public class JwtTokenUtils {
                 .build()
                 .parseSignedClaims(token)
                 .getBody();
-
     }
 
 }

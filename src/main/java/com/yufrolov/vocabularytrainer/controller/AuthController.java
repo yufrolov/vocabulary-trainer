@@ -6,7 +6,10 @@ import com.yufrolov.vocabularytrainer.dto.ProfileDTO;
 import com.yufrolov.vocabularytrainer.entity.Profile;
 import com.yufrolov.vocabularytrainer.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1")
@@ -19,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth")
-    public JwtResponseDTO createAuthToken(@RequestBody @Valid JwtRequestDTO authRequest){
+    public JwtResponseDTO createAuthToken(@RequestBody @Valid JwtRequestDTO authRequest) {
         return authService.createAuthToken(authRequest);
     }
 

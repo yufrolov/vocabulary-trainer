@@ -36,7 +36,7 @@ public class ProfileService implements UserDetailsService {
         var user = getProfile(username);
         return new User(
                 user.getEmail()
-                , passwordEncoder.encode(user.getPassword())
+                , user.getPassword()
                 , List.of(new SimpleGrantedAuthority(user.getRole().getTitle()))
         );
     }
@@ -56,15 +56,6 @@ public class ProfileService implements UserDetailsService {
     public Profile getProfile(String email) {
         return profileRepository.findByEmail(email).orElseThrow(
                 () -> new ProfileNotFoundException("Not found user"));
-    }
-
-    public Profile getProfile(String email, String password) {
-        var profile = getProfile(email);
-        if (!passwordEncoder.matches(password, profile.getPassword())) {
-            throw new ProfileNotFoundException("Not found user");
-        }
-        return profile;
-
     }
 
     private Profile mapToEntity(ProfileDTO profileDTO) {
