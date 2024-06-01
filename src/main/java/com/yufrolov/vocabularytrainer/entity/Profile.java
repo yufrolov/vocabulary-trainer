@@ -43,12 +43,18 @@ public class Profile {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "profile")
     private List<Vocabulary> vocabularies = new ArrayList<>();
 
-    public Profile(String password, String surname, String name, String midname, String email) {
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
+    private Role role;
+
+    public Profile(String password, String surname, String name, String midname, String email, Role role) {
         this.password = password;
         this.surname = surname;
         this.name = name;
         this.midname = midname;
         this.email = email;
+        this.role = role;
     }
 
     public Profile(Profile profile) {
@@ -59,5 +65,6 @@ public class Profile {
         this.midname = profile.getMidname();
         this.email = profile.getEmail();
         this.vocabularies = profile.getVocabularies();
+        this.role = profile.getRole();
     }
 }

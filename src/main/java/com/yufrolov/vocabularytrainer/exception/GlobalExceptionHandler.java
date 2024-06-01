@@ -49,4 +49,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleMethod(VocabularyNotFoundException ex) {
         return ResponseEntity.notFound().build();
     }
+
+    @ExceptionHandler(value = MyBadCredentialsException.class)
+    public ResponseEntity<Object> handleMethod(MyBadCredentialsException ex) {
+        return ResponseEntity.badRequest().body(
+                List.of(ex.getMessage())
+        );
+    }
 }

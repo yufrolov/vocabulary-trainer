@@ -1,3 +1,6 @@
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 30m
 spring:
   application:
     name: vocabulary-trainer
@@ -7,3 +10,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/vocabulary_db
     username: vocabulary_admin
     password: vocabularypwd
+
+logging:
+  level:
+    org.springframework.security: TRACE

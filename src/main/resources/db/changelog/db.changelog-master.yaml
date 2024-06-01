@@ -33,3 +33,10 @@ databaseChangeLog:
       file: db/changelog/scripts/16_add_constraint_vocabularies_language_fk.sql
   - include:
       file: db/changelog/scripts/17_add_constraint_vocabularies_language_translate_fk.sql
+  - include:
+      file: db/changelog/scripts/18_add_table_roles.sql
+  - include:
+      file: db/changelog/scripts/19_add_column_in_profiles.sql
+  - include:
+      file: db/changelog/scripts/20_add_constraint_profiles_role_fk.sql
+

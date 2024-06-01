@@ -3,6 +3,7 @@ package com.yufrolov.vocabularytrainer.controller;
 import com.yufrolov.vocabularytrainer.dto.ProfileDTO;
 import com.yufrolov.vocabularytrainer.entity.Profile;
 import com.yufrolov.vocabularytrainer.service.ProfileService;
+import com.yufrolov.vocabularytrainer.utils.JwtTokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/profiles")
@@ -20,24 +20,11 @@ public class ProfileController {
 
     private final ProfileService profileService;
 
-    public ProfileController(ProfileService profileService) {
+    private final JwtTokenUtils jwtTokenUtils;
+
+    public ProfileController(ProfileService profileService, JwtTokenUtils jwtTokenUtils) {
         this.profileService = profileService;
-    }
-
-    @Operation(summary = "Creating a user account")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "The user account has been created",
-                    content = @Content)
-            , @ApiResponse(responseCode = "400", description = "Incorrectly entered data",
-            content = @Content)
-            , @ApiResponse(responseCode = "500", description = "Server error",
-            content = @Content)
-    })
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping()
-    public Profile create(@RequestBody @Valid ProfileDTO profileDTO) {
-        return profileService.create(profileDTO);
-
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
     @Operation(summary = "View all user accounts")
@@ -47,7 +34,7 @@ public class ProfileController {
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
-    @GetMapping
+    @GetMapping("/list")
     public List<Profile> getProfiles() {
         return profileService.getAllProfiles();
     }
@@ -62,9 +49,10 @@ public class ProfileController {
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
-    @GetMapping("/{id}")
-    public Profile getProfile(@PathVariable(name = "id") UUID id) {
-        return profileService.getProfile(id);
+    @GetMapping()
+    public Profile getProfile(@RequestHeader("Authorization") String header) {
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        return profileService.getProfile(jwtTokenUtils.getId(token));
     }
 
     @Operation(summary = "Changing user account information")
@@ -79,9 +67,10 @@ public class ProfileController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PutMapping("/{id}")
-    public Profile update(@PathVariable(name = "id") UUID id, @RequestBody @Valid ProfileDTO profileDTO) {
-        return profileService.update(id, profileDTO);
+    @PutMapping()
+    public Profile update(@RequestHeader("Authorization") String header, @RequestBody @Valid ProfileDTO profileDTO) {
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        return profileService.update(jwtTokenUtils.getId(token), profileDTO);
     }
 
     @Operation(summary = "Deleting a user's account")
@@ -94,8 +83,9 @@ public class ProfileController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(name = "id") UUID id) {
-        profileService.delete(id);
+    @DeleteMapping()
+    public void delete(@RequestHeader("Authorization") String header) {
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        profileService.delete(jwtTokenUtils.getId(token));
     }
 }

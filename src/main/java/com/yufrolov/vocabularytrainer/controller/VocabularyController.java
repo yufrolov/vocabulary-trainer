@@ -5,6 +5,7 @@ import com.yufrolov.vocabularytrainer.dto.VocabularyDTO;
 import com.yufrolov.vocabularytrainer.entity.Vocabulary;
 import com.yufrolov.vocabularytrainer.service.VocabularyService;
 import com.yufrolov.vocabularytrainer.service.WordService;
+import com.yufrolov.vocabularytrainer.utils.JwtTokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/vocabularies")
@@ -24,9 +24,12 @@ public class VocabularyController {
 
     private final WordService wordService;
 
-    public VocabularyController(VocabularyService vocabularyService, WordService wordService) {
+    private final JwtTokenUtils jwtTokenUtils;
+
+    public VocabularyController(VocabularyService vocabularyService, WordService wordService, JwtTokenUtils jwtTokenUtils) {
         this.vocabularyService = vocabularyService;
         this.wordService = wordService;
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
     @Operation(summary = "Creating a vocabulary for a specific user")
@@ -41,10 +44,11 @@ public class VocabularyController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{profileId}")
-    public Vocabulary create(@PathVariable(name = "profileId") UUID profileId
+    @PostMapping()
+    public Vocabulary create(@RequestHeader("Authorization") String header
             , @Valid @RequestBody VocabularyDTO vocabularyDTO) {
-        return vocabularyService.create(profileId, vocabularyDTO);
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        return vocabularyService.create(jwtTokenUtils.getId(token), vocabularyDTO);
     }
 
     @Operation(summary = "Viewing a vocabulary by a specific id")
@@ -56,10 +60,11 @@ public class VocabularyController {
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
-    @GetMapping("/{id}/{profileId}")
-    public Vocabulary getVocabulary(@PathVariable(name = "profileId") UUID profileId,
-                                    @PathVariable(name = "id") Long id) {
-        return vocabularyService.getVocabulary(profileId, id);
+    @GetMapping("/{id}")
+    public Vocabulary getVocabulary(@RequestHeader("Authorization") String header
+            , @PathVariable(name = "id") Long id) {
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        return vocabularyService.getVocabulary(jwtTokenUtils.getId(token), id);
     }
 
     @Operation(summary = "Deleting a vocabulary")
@@ -72,10 +77,11 @@ public class VocabularyController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}/{profileId}")
-    public void deleteVocabulary(@PathVariable(name = "profileId") UUID profileId,
-                                 @PathVariable(name = "id") Long id) {
-        vocabularyService.deleteVocabulary(profileId, id);
+    @DeleteMapping("/{id}")
+    public void deleteVocabulary(@RequestHeader("Authorization") String header
+            , @PathVariable(name = "id") Long id) {
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        vocabularyService.deleteVocabulary(jwtTokenUtils.getId(token), id);
     }
 
     @Operation(summary = "View all user vocabularies")
@@ -87,9 +93,10 @@ public class VocabularyController {
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
-    @GetMapping("/{profileId}")
-    public List<Vocabulary> getAllVocabulary(@PathVariable(name = "profileId") UUID profileId) {
-        return vocabularyService.getAllVocabularies(profileId);
+    @GetMapping()
+    public List<Vocabulary> getAllVocabulary(@RequestHeader("Authorization") String header) {
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        return vocabularyService.getAllVocabularies(jwtTokenUtils.getId(token));
     }
 
     @Operation(summary = "Adding a word and its translation to the vocabulary")
@@ -104,11 +111,12 @@ public class VocabularyController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{id}/words/{profileId}")
-    public TranslateDTO translate(@PathVariable(name = "profileId") UUID profileId
+    @PostMapping("/{id}/words")
+    public TranslateDTO translate(@RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id
             , @Valid @RequestBody TranslateDTO translateDTO) {
-        return wordService.translate(profileId, translateDTO, id);
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        return wordService.translate(jwtTokenUtils.getId(token), translateDTO, id);
     }
 
     @Operation(summary = "Deleting a translation from the vocabulary")
@@ -121,10 +129,11 @@ public class VocabularyController {
             content = @Content)
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}/translations/{translationId}/{profileId}")
-    public void deleteTranslationInVocabulary(@PathVariable(name = "profileId") UUID profileId
+    @DeleteMapping("/{id}/translations/{translationId}")
+    public void deleteTranslationInVocabulary(@RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id
             , @PathVariable(name = "translationId") Long translationId) {
-        vocabularyService.deleteTranslationInVocabulary(profileId, id, translationId);
+        var token = jwtTokenUtils.getTokenFromHeaders(header);
+        vocabularyService.deleteTranslationInVocabulary(jwtTokenUtils.getId(token), id, translationId);
     }
 }
