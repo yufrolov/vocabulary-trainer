@@ -3,10 +3,12 @@ package com.yufrolov.vocabularytrainer.utils;
 import com.yufrolov.vocabularytrainer.entity.Profile;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +35,7 @@ public class JwtTokenUtils {
                 .subject(profile.getEmail())
                 .issuedAt(issueDate)
                 .expiration(expiredDate)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(getSecKey(), Jwts.SIG.HS256)
                 .compact();
     }
 
@@ -53,12 +55,17 @@ public class JwtTokenUtils {
         return UUID.fromString(getAllClaimsFromToken(token).get("id", String.class));
     }
 
+    private SecretKey getSecKey(){
+        var keyBytes = secret.getBytes(StandardCharsets.UTF_8);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(secret)
+                .verifyWith(getSecKey())
                 .build()
                 .parseSignedClaims(token)
-                .getBody();
+                .getPayload();
     }
 
 }
