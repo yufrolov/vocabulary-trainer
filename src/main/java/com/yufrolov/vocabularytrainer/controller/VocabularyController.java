@@ -4,7 +4,6 @@ import com.yufrolov.vocabularytrainer.dto.TranslateDTO;
 import com.yufrolov.vocabularytrainer.dto.VocabularyDTO;
 import com.yufrolov.vocabularytrainer.entity.Vocabulary;
 import com.yufrolov.vocabularytrainer.service.VocabularyService;
-import com.yufrolov.vocabularytrainer.service.WordService;
 import com.yufrolov.vocabularytrainer.utils.JwtTokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,13 +21,10 @@ public class VocabularyController {
 
     private final VocabularyService vocabularyService;
 
-    private final WordService wordService;
-
     private final JwtTokenUtils jwtTokenUtils;
 
-    public VocabularyController(VocabularyService vocabularyService, WordService wordService, JwtTokenUtils jwtTokenUtils) {
+    public VocabularyController(VocabularyService vocabularyService, JwtTokenUtils jwtTokenUtils) {
         this.vocabularyService = vocabularyService;
-        this.wordService = wordService;
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
@@ -112,11 +108,11 @@ public class VocabularyController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}/words")
-    public TranslateDTO translate(@RequestHeader("Authorization") String header
+    public Vocabulary translate(@RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id
             , @Valid @RequestBody TranslateDTO translateDTO) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);
-        return wordService.translate(jwtTokenUtils.getId(token), translateDTO, id);
+        return vocabularyService.addWord(jwtTokenUtils.getId(token), id, translateDTO);
     }
 
     @Operation(summary = "Deleting a translation from the vocabulary")
