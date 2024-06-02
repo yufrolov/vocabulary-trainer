@@ -1,6 +1,7 @@
 package com.yufrolov.vocabularytrainer.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -50,8 +51,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.notFound().build();
     }
 
-    @ExceptionHandler(value = MyBadCredentialsException.class)
-    public ResponseEntity<Object> handleMethod(MyBadCredentialsException ex) {
+    @ExceptionHandler(value = BadCredentialsException.class)
+    public ResponseEntity<Object> handleMethod(BadCredentialsException ex) {
         return ResponseEntity.badRequest().body(
                 List.of(ex.getMessage())
         );
