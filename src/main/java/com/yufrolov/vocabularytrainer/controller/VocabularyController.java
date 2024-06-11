@@ -6,9 +6,11 @@ import com.yufrolov.vocabularytrainer.entity.Vocabulary;
 import com.yufrolov.vocabularytrainer.service.VocabularyService;
 import com.yufrolov.vocabularytrainer.utils.JwtTokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/v1/vocabularies")
+@SecurityRequirement(name = "bearerAuth")
 public class VocabularyController {
 
     private final VocabularyService vocabularyService;
@@ -34,6 +37,8 @@ public class VocabularyController {
                     content = @Content)
             , @ApiResponse(responseCode = "400", description = "Incorrectly entered data",
             content = @Content)
+            ,@ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content)
             , @ApiResponse(responseCode = "404", description = "The user was not found",
             content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
@@ -41,7 +46,7 @@ public class VocabularyController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping()
-    public Vocabulary create(@RequestHeader("Authorization") String header
+    public Vocabulary create(@Parameter(hidden = true) @RequestHeader("Authorization") String header
             , @Valid @RequestBody VocabularyDTO vocabularyDTO) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);
         return vocabularyService.create(jwtTokenUtils.getId(token), vocabularyDTO);
@@ -51,13 +56,15 @@ public class VocabularyController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vocabulary found",
                     content = @Content)
+            ,@ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content)
             , @ApiResponse(responseCode = "404", description = "The user or vocabulary was not found",
             content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
     @GetMapping("/{id}")
-    public Vocabulary getVocabulary(@RequestHeader("Authorization") String header
+    public Vocabulary getVocabulary(@Parameter(hidden = true) @RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);
         return vocabularyService.getVocabulary(jwtTokenUtils.getId(token), id);
@@ -67,6 +74,8 @@ public class VocabularyController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "The vocabulary has been deleted",
                     content = @Content)
+            ,@ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content)
             , @ApiResponse(responseCode = "404", description = "The user or vocabulary was not found",
             content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
@@ -74,7 +83,7 @@ public class VocabularyController {
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
-    public void deleteVocabulary(@RequestHeader("Authorization") String header
+    public void deleteVocabulary(@Parameter(hidden = true) @RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);
         vocabularyService.deleteVocabulary(jwtTokenUtils.getId(token), id);
@@ -84,13 +93,15 @@ public class VocabularyController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vocabularies found",
                     content = @Content)
+            ,@ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content)
             , @ApiResponse(responseCode = "404", description = "The user was not found",
             content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
     @GetMapping()
-    public List<Vocabulary> getAllVocabulary(@RequestHeader("Authorization") String header) {
+    public List<Vocabulary> getAllVocabulary(@Parameter(hidden = true) @RequestHeader("Authorization") String header) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);
         return vocabularyService.getAllVocabularies(jwtTokenUtils.getId(token));
     }
@@ -101,6 +112,8 @@ public class VocabularyController {
                     content = @Content)
             , @ApiResponse(responseCode = "400", description = "Incorrectly entered data",
             content = @Content)
+            ,@ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content)
             , @ApiResponse(responseCode = "404", description = "The user or vocabulary was not found",
             content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
@@ -108,7 +121,7 @@ public class VocabularyController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{id}/words")
-    public Vocabulary translate(@RequestHeader("Authorization") String header
+    public Vocabulary addWord(@Parameter(hidden = true) @RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id
             , @Valid @RequestBody TranslateDTO translateDTO) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);
@@ -119,6 +132,8 @@ public class VocabularyController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "The translation has been deleted",
                     content = @Content)
+            ,@ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content)
             , @ApiResponse(responseCode = "404", description = "The user or vocabulary was not found",
             content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
@@ -126,7 +141,7 @@ public class VocabularyController {
     })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}/translations/{translationId}")
-    public void deleteTranslationInVocabulary(@RequestHeader("Authorization") String header
+    public void deleteTranslationInVocabulary(@Parameter(hidden = true) @RequestHeader("Authorization") String header
             , @PathVariable(name = "id") Long id
             , @PathVariable(name = "translationId") Long translationId) {
         var token = jwtTokenUtils.getTokenFromHeaders(header);

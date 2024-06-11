@@ -1,0 +1,511 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "REST API vocabulary-trainer ",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/v1/profiles": {
+      "get": {
+        "tags": [
+          "profile-controller"
+        ],
+        "summary": "Viewing an account by user id",
+        "operationId": "getProfile",
+        "responses": {
+          "404": {
+            "description": "The user was not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "200": {
+            "description": "Profile found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "profile-controller"
+        ],
+        "summary": "Changing user account information",
+        "operationId": "update",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Incorrectly entered data"
+          },
+          "201": {
+            "description": "The user account has been changed"
+          },
+          "404": {
+            "description": "The user was not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "profile-controller"
+        ],
+        "summary": "Deleting a user's account",
+        "operationId": "delete",
+        "responses": {
+          "404": {
+            "description": "The user was not found"
+          },
+          "204": {
+            "description": "The profile has been deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/vocabularies": {
+      "get": {
+        "tags": [
+          "vocabulary-controller"
+        ],
+        "summary": "View all user vocabularies",
+        "operationId": "getAllVocabulary",
+        "responses": {
+          "404": {
+            "description": "The user was not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "200": {
+            "description": "Vocabularies found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "vocabulary-controller"
+        ],
+        "summary": "Creating a vocabulary for a specific user",
+        "operationId": "create",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VocabularyDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Incorrectly entered data"
+          },
+          "404": {
+            "description": "The user was not found"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "201": {
+            "description": "The vocabulary has been created"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/vocabularies/{id}/words": {
+      "post": {
+        "tags": [
+          "vocabulary-controller"
+        ],
+        "summary": "Adding a word and its translation to the vocabulary",
+        "operationId": "addWord",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranslateDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Adding a word to the vocabulary"
+          },
+          "400": {
+            "description": "Incorrectly entered data"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "404": {
+            "description": "The user or vocabulary was not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/registration": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "Creating a user account",
+        "operationId": "create_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProfileDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "400": {
+            "description": "Incorrectly entered data"
+          },
+          "201": {
+            "description": "The user account has been created"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/v1/auth": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "summary": "User authentication",
+        "operationId": "createAuthToken",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JwtRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "500": {
+            "description": "Server error"
+          },
+          "200": {
+            "description": "The user is authenticated"
+          },
+          "400": {
+            "description": "Bad credentials"
+          }
+        }
+      }
+    },
+    "/v1/vocabularies/{id}": {
+      "get": {
+        "tags": [
+          "vocabulary-controller"
+        ],
+        "summary": "Viewing a vocabulary by a specific id",
+        "operationId": "getVocabulary",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "200": {
+            "description": "Vocabulary found"
+          },
+          "404": {
+            "description": "The user or vocabulary was not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "vocabulary-controller"
+        ],
+        "summary": "Deleting a vocabulary",
+        "operationId": "deleteVocabulary",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The vocabulary has been deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "404": {
+            "description": "The user or vocabulary was not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/profiles/list": {
+      "get": {
+        "tags": [
+          "profile-controller"
+        ],
+        "summary": "View all user accounts",
+        "operationId": "getProfiles",
+        "responses": {
+          "200": {
+            "description": "Profiles found"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/v1/vocabularies/{id}/translations/{translationId}": {
+      "delete": {
+        "tags": [
+          "vocabulary-controller"
+        ],
+        "summary": "Deleting a translation from the vocabulary",
+        "operationId": "deleteTranslationInVocabulary",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "translationId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          },
+          "204": {
+            "description": "The translation has been deleted"
+          },
+          "404": {
+            "description": "The user or vocabulary was not found"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ProfileDTO": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "midname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "VocabularyDTO": {
+        "required": [
+          "source",
+          "target"
+        ],
+        "type": "object",
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          }
+        }
+      },
+      "TranslateDTO": {
+        "required": [
+          "translatedText"
+        ],
+        "type": "object",
+        "properties": {
+          "translatedText": {
+            "type": "string"
+          }
+        }
+      },
+      "JwtRequestDTO": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
