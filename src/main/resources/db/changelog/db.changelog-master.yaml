@@ -39,4 +39,7 @@ databaseChangeLog:
       file: db/changelog/scripts/19_add_column_in_profiles.sql
   - include:
       file: db/changelog/scripts/20_add_constraint_profiles_role_fk.sql
-
+  - include:
+      file: db/changelog/scripts/21_fill_table_languages.sql
+  - include:
+      file: db/changelog/scripts/22_fill_table_roles.sql
