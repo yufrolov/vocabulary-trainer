@@ -23,12 +23,14 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @Operation(summary = "User authentication")
+//    @Operation(summary = "User authentication")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "The user is authenticated",
                     content = @Content)
             , @ApiResponse(responseCode = "400", description = "Bad credentials",
-            content = @Content)
+            content = @Content),
+            @ApiResponse(responseCode = "404", description = "The user was not found",
+                    content = @Content)
             , @ApiResponse(responseCode = "500", description = "Server error",
             content = @Content)
     })
@@ -38,7 +40,7 @@ public class AuthController {
     }
 
 
-    @Operation(summary = "Creating a user account")
+//    @Operation(summary = "Creating a user account")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "The user account has been created",
                     content = @Content)

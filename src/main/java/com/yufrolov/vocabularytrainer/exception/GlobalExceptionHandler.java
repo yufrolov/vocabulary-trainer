@@ -2,6 +2,7 @@ package com.yufrolov.vocabularytrainer.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,6 +18,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.internalServerError().body(
                 List.of(ex.getClass().getName())
         );
+    }
+
+    @ExceptionHandler(value = InternalAuthenticationServiceException.class)
+    public ResponseEntity<Object> handleMethod(InternalAuthenticationServiceException ex) {
+        return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)

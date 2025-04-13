@@ -31,7 +31,7 @@ public class VocabularyController {
         this.jwtTokenUtils = jwtTokenUtils;
     }
 
-    @Operation(summary = "Creating a vocabulary for a specific user")
+//    @Operation(summary = "Creating a vocabulary for a specific user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "The vocabulary has been created",
                     content = @Content)
@@ -52,7 +52,7 @@ public class VocabularyController {
         return vocabularyService.create(jwtTokenUtils.getId(token), vocabularyDTO);
     }
 
-    @Operation(summary = "Viewing a vocabulary by a specific id")
+//    @Operation(summary = "Viewing a vocabulary by a specific id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vocabulary found",
                     content = @Content)
@@ -70,7 +70,7 @@ public class VocabularyController {
         return vocabularyService.getVocabulary(jwtTokenUtils.getId(token), id);
     }
 
-    @Operation(summary = "Deleting a vocabulary")
+//    @Operation(summary = "Deleting a vocabulary")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "The vocabulary has been deleted",
                     content = @Content)
@@ -89,7 +89,7 @@ public class VocabularyController {
         vocabularyService.deleteVocabulary(jwtTokenUtils.getId(token), id);
     }
 
-    @Operation(summary = "View all user vocabularies")
+//    @Operation(summary = "View all user vocabularies")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vocabularies found",
                     content = @Content)
@@ -106,7 +106,7 @@ public class VocabularyController {
         return vocabularyService.getAllVocabularies(jwtTokenUtils.getId(token));
     }
 
-    @Operation(summary = "Adding a word and its translation to the vocabulary")
+//    @Operation(summary = "Adding a word and its translation to the vocabulary")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Adding a word to the vocabulary",
                     content = @Content)
@@ -128,7 +128,7 @@ public class VocabularyController {
         return vocabularyService.addWord(jwtTokenUtils.getId(token), id, translateDTO);
     }
 
-    @Operation(summary = "Deleting a translation from the vocabulary")
+//    @Operation(summary = "Deleting a translation from the vocabulary")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "The translation has been deleted",
                     content = @Content)
